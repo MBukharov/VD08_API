@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from flask import Flask, render_template, request
 import requests
 
@@ -6,14 +8,14 @@ app = Flask(__name__)
 
 @app.route("/",methods=['GET','POST'])
 def index():
+    quote = None
     if request.method == 'POST':
         response = get_quote()
         quote = {
             'author': response['originator']['name'],
-            'quote': response['content']
+            'content': response['content']
         }
-        render_template('index.html',**quote)
-    render_template('index.html')
+    return render_template('index.html',quote=quote)
 
 
 def get_quote():
